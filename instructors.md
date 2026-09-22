@@ -13,14 +13,14 @@ Welcome to the **DSA Grind** repository. This repo is the single source of truth
 
 ## Languages
 
-Every problem solution is organized under four language folders:
+Solutions are provided in four languages. Java lives in the Maven source tree; the other three stay under each topic folder.
 
-| Folder        | Language   |
-|---------------|------------|
-| `java/`       | Java       |
-| `python/`     | Python     |
-| `cpp/`        | C++        |
-| `javascript/` | JavaScript |
+| Language   | Location |
+|------------|----------|
+| Java       | `src/main/java/topics/<topic>/solutions/` |
+| Python     | `topics/<topic>/solutions/python/` |
+| C++        | `topics/<topic>/solutions/cpp/` |
+| JavaScript | `topics/<topic>/solutions/javascript/` |
 
 > **Note:** I write and maintain everything in **Java**. The other three language folders exist so students can compare approaches in a language they are comfortable with. Those versions may be contributed or translated over time — always treat the Java solution as the primary reference.
 
@@ -28,33 +28,58 @@ Every problem solution is organized under four language folders:
 
 ## Repository structure
 
+This is a **Maven** project (Java 21). All Java code follows standard Maven layout while mirroring the same topic folder names.
+
 ```
 dsa-grind-26-27/
-├── instructors.md          ← you are here
-└── topics/
-    ├── arrays/
-    │   ├── notes/          ← concept notes, patterns, complexity (Java examples)
-    │   └── solutions/
-    │       ├── java/
-    │       ├── python/
-    │       ├── cpp/
-    │       └── javascript/
-    ├── strings/
-    │   ├── notes/
-    │   └── solutions/
-    │       ├── java/
-    │       ├── python/
-    │       ├── cpp/
-    │       └── javascript/
-    └── ... (one folder per topic)
+├── pom.xml
+├── instructors.md
+├── src/main/java/topics/       ← all Java (practice + solutions)
+│   └── arrays/
+│       ├── practice/           ← package: topics.arrays.practice
+│       │   └── Arrays.java
+│       └── solutions/          ← package: topics.arrays.solutions
+│           └── TwoSum.java
+└── topics/                     ← notes + non-Java solutions
+    └── arrays/
+        ├── notes/
+        └── solutions/
+            ├── python/
+            ├── cpp/
+            └── javascript/
 ```
 
 ### Per-topic layout
 
 | Path | Contents |
 |------|----------|
-| `topics/<topic>/notes/` | Markdown or Java-based notes — definitions, patterns, time/space complexity, worked examples |
-| `topics/<topic>/solutions/<lang>/` | One file per problem, named clearly (e.g. `two-sum.java`, `two-sum.py`) |
+| `topics/<topic>/notes/` | Markdown notes — definitions, patterns, time/space complexity, Java code snippets |
+| `src/main/java/topics/<topic>/practice/` | Java practice files (`package topics.<topic>.practice`) |
+| `src/main/java/topics/<topic>/solutions/` | Java solution files (`package topics.<topic>.solutions`) |
+| `topics/<topic>/solutions/<lang>/` | Python, C++, or JavaScript solutions (one file per problem) |
+
+### Package naming
+
+The package must match the folder path under `src/main/java/`:
+
+| File path | Package |
+|-----------|---------|
+| `src/main/java/topics/arrays/practice/Arrays.java` | `topics.arrays.practice` |
+| `src/main/java/topics/arrays/solutions/TwoSum.java` | `topics.arrays.solutions` |
+
+---
+
+## Build & run (Java)
+
+Uses **Java 21** and the Maven Wrapper (`./mvnw`) — no global Maven install required.
+
+```bash
+# Compile all Java sources
+./mvnw compile
+
+# Run a practice class
+./mvnw exec:java -Dexec.mainClass="topics.arrays.practice.Arrays"
+```
 
 ---
 
@@ -104,12 +129,9 @@ dsa-grind-26-27/
 - Code snippets inside notes should be **Java**
 
 ### Solutions
-- One file per problem: `<problem-slug>.<ext>`
-- Examples:
-  - `two-sum.java`
-  - `two-sum.py`
-  - `two-sum.cpp`
-  - `two-sum.js`
+- **Java:** one public class per file, PascalCase (e.g. `TwoSum.java` in `src/main/java/topics/arrays/solutions/`)
+- **Other languages:** one file per problem, kebab-case slug
+  - `two-sum.py`, `two-sum.cpp`, `two-sum.js`
 
 ### Problem slug rules
 - Lowercase, hyphen-separated
@@ -120,9 +142,11 @@ dsa-grind-26-27/
 ## Instructor workflow
 
 1. Create or update notes under `topics/<topic>/notes/` (Java examples only).
-2. Add the Java solution under `topics/<topic>/solutions/java/`.
-3. Optionally add Python, C++, or JavaScript versions under the respective folders.
-4. Keep commits focused — one topic or one problem per commit when possible.
+2. Add Java practice code under `src/main/java/topics/<topic>/practice/`.
+3. Add Java solutions under `src/main/java/topics/<topic>/solutions/`.
+4. Optionally add Python, C++, or JavaScript versions under `topics/<topic>/solutions/<lang>/`.
+5. Run `mvn compile` to verify before committing.
+6. Keep commits focused — one topic or one problem per commit when possible.
 
 ---
 
